@@ -3,4 +3,5 @@
 
 - include: install.yml
 - include: databases.yml
+- include: initialize.yml
 - include: users.yml

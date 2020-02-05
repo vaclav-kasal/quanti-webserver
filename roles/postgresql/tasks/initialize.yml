@@ -1,0 +1,27 @@
+- stat:
+    path: /etc/postgresql/11/main/initialized
+  register: result
+
+- name: Copy file for init db
+  copy:
+    src: initialize.sql
+    dest: /tmp/initialize.sql
+    mode: 0600
+    owner: postgres
+  when: not result.stat.exists
+  
+- name: Import sql
+  vars:
+    # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+    ansible_ssh_pipelining: true
+  become: true
+  become_user: postgres
+  shell: psql -v ON_ERROR_STOP=1 -f /tmp/initialize.sql
+  register: result
+  when: not result.stat.exists
+
+- name: Mark init as completed
+  copy:
+    src: initialized
+    dest: /etc/postgresql/11/main/initialized
+

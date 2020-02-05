@@ -1,0 +1,14 @@
+- name: Enable Apache mods.
+  file:
+    src: "/etc/apache2/mods-available/{{ item }}"
+    dest: "/etc/apache2/mods-enabled/{{ item }}"
+    state: link
+  with_items: "{{ apache_mods_enabled }}"
+  notify: Restart apache
+
+- name: Disable Apache mods.
+  file:
+    path: "/etc/apache2/mods-enabled/{{ item }}"
+    state: absent
+  with_items: "{{ apache_mods_disabled }}"
+  notify: Restart apache

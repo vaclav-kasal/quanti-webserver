@@ -1,31 +1,46 @@
-Role Name
-=========
+Apache 2.4
+==========
 
-A brief description of the role goes here.
+Apache 2.4 for debian 10.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+If you would like to use https, you need to provide certificate for TLS.
 
 Role Variables
 --------------
+Available variables are listed in defaults/main.yml
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: webserver
+      vars:
+        apache_vhosts:
+          - servername: example.com
+            serveralias: www.example.com
+            documentroot: /var/www/examplecom/public_html
+            extra_parameters: |
+              SSLProtocol             -TLSv1.1 -TLSv1.2 -TLSv1.3
+              SSLHonorCipherOrder     off
+              SSLSessionTickets       off
+
+              SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
+              SSLCertificateFile      /etc/ssl/ansible-self-signed/certs/example.com.crt
+              SSLCertificateKeyFile   /etc/ssl/ansible-self-signed/private/example.com.key
+
       roles:
-         - { role: username.rolename, x: 42 }
+      - apache
+
+
 
 License
 -------

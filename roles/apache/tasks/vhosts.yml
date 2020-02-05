@@ -1,0 +1,27 @@
+- name: Ensure web directories exist
+  file:
+    dest: "{{ item.documentroot }}"
+    state: directory
+    recurse: yes
+  with_items: "{{ apache_vhosts }}"
+
+- name: Ensure web directories exist (ssl)
+  file:
+    dest: "{{ item.documentroot }}"
+    state: directory
+    recurse: yes
+  with_items: "{{ apache_ssl_vhosts }}"
+
+- name: Create virtual hosts
+  template:
+    src: vhosts.j2
+    dest: /etc/apache2/sites-available/vhosts.conf
+  notify: Restart apache
+
+- name: Create symlink to vhosts.conf
+  file:
+    state: link
+    src: /etc/apache2/sites-available/vhosts.conf
+    dest: /etc/apache2/sites-enabled/vhosts.conf
+  notify: Restart apache
+

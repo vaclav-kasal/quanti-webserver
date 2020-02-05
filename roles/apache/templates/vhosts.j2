@@ -1,0 +1,71 @@
+# {{ ansible_managed }}
+
+{# http vhost #}
+{% for vhost in apache_vhosts %}
+<VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port }}>
+  ServerName {{ vhost.servername }}
+
+{% if vhost.serveralias is defined %}
+  ServerAlias {{ vhost.serveralias }}
+{% endif %}
+
+{% if vhost.documentroot is defined %}
+  DocumentRoot "{{ vhost.documentroot }}"
+{% endif %}
+
+{% if vhost.documentroot is defined %}
+  <Directory "{{ vhost.documentroot }}">
+    AllowOverride {{ vhost.allow_override | default(apache_allow_override) }}
+    Options {{ vhost.options | default(apache_options) }}
+  </Directory>
+{% endif %}
+{% if vhost.extra_parameters is defined %}
+  {{ vhost.extra_parameters }}
+{% endif %}
+
+{% if vhost.https_redirect | default(https_redirect) == true %}
+RewriteEngine on
+RewriteCond %{SERVER_PORT} !=443
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+{% endif %}
+
+</VirtualHost>
+
+{% endfor %}
+
+{# https vhost #}
+{% for vhost in apache_ssl_vhosts %}
+<VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port_ssl }}>
+  ServerName {{ vhost.servername }}
+
+{% if vhost.serveralias is defined %}
+  ServerAlias {{ vhost.serveralias }}
+{% endif %}
+
+{% if vhost.documentroot is defined %}
+  DocumentRoot "{{ vhost.documentroot }}"
+{% endif %}
+
+{% if vhost.documentroot is defined %}
+  <Directory "{{ vhost.documentroot }}">
+    AllowOverride {{ vhost.allow_override | default(apache_allow_override) }}
+    Options {{ vhost.options | default(apache_options) }}
+  </Directory>
+{% endif %}
+
+SSLEngine             on
+SSLProtocol           {{ vhost.ssl_protocol | default(ssl_protocol) }}
+{% if vhost.ssl_cipher_suite | default(ssl_cipher_suite) != false %}
+SSLCipherSuite        {{ vhost.ssl_cipher_suite | default(ssl_cipher_suite) }}
+{% endif %}
+SSLHonorCipherOrder   {{ vhost.ssl_honor_cipher_order | default(ssl_honor_cipher_order) }}
+SSLSessionTickets     {{ vhost.ssl_session_tickets | default(ssl_session_tickets) }}
+SSLCertificateFile    {{ vhost.ssl_certificate_file | default(ssl_certificate_file) }}
+SSLCertificateKeyFile {{ vhost.ssl_certificate_key_file | default(ssl_certificate_key_file) }}
+
+{% if vhost.extra_parameters is defined %}
+  {{ vhost.extra_parameters }}
+{% endif %}
+</VirtualHost>
+
+{% endfor %}

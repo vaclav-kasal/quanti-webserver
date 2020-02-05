@@ -1,2 +1,32 @@
 ---
 # defaults file for apache
+
+apache_allow_override: All
+apache_listen_ip: "*"
+apache_listen_port: 80
+apache_listen_port_ssl: 443
+
+# required properties: documentroot, servername
+# optional properties: serveralias, allow_override, options, extra_parameters
+apache_vhosts: []
+
+# required properties: documentroot, servername
+# required ssl properties: ssl_certificate_file, 
+# optional properties: serveralias, allow_override, options, extra_parameters
+# optional ssl properties: ssl_protocol, ssl_cipher_suite, ssl_honor_cipher_order, ssl_session_tickets
+apache_vhosts_ssl: []
+
+apache_options: "-Indexes +FollowSymLinks"
+# for more available options see file /etc/apache/mods-available
+apache_mods_enabled:
+  - ssl.load
+  - rewrite.load
+apache_mods_disabled: []
+
+ssl_protocol:           "-all +TLSv1.3 +TLSv1.2"
+# another possible value: false
+ssl_cipher_suite:       "HIGH:!aNULL:!MD5"
+ssl_honor_cipher_order: "off"
+ssl_session_tickets:    "off"
+
+https_redirect:         false

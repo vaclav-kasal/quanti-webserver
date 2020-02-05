@@ -1,0 +1,11 @@
+- name: Copy index.html (ssl vhosts)
+  template:
+    dest: "{{ item.documentroot }}/index.html"
+    src: index.html.j2
+  with_items: "{{ apache_ssl_vhosts }}"
+
+- name: Copy index.html
+  template:
+    dest: "{{ item.documentroot }}/index.html"
+    src: index.html.j2
+  with_items: "{{ apache_vhosts }}"

@@ -2,18 +2,6 @@
   become_user: root
   become: true
   vars:
-    self_signed_ca_key: /etc/ssl/ansible-self-signed/private/ca.key
-    self_signed_ca_cert: /etc/ssl/ansible-self-signed/certs/ca.pem
-    self_signed_ca_rootself_signed_ca_password: 34lkj42lkj5hi
-    self_signed_ca_country: CZ
-    self_signed_ca_state: Czech repubic
-    self_signed_ca_locality: Prague
-    self_signed_ca_organization: Quanti s.r.o.
-    self_signed_ca_organizationalunit: IT
-    self_signed_ca_commonname: Quanti s.r.o
-    self_signed_ca_email: vasekkasal@gmail.com
-
-
     self_signed_cert:
     - self_signed_domain: prijimacitest.quanti.cz
       self_signed_domain_key: /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key

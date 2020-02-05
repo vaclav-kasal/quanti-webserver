@@ -1,0 +1,67 @@
+### CA
+
+- name: Ensure directories exist for CA cert and private keys
+  file:
+    dest: '{{item.split("/")[0:-1]|join("/") }}'
+    state: directory
+  with_items:
+  - "{{self_signed_ca_key}}"
+  - "{{self_signed_ca_cert}}"
+
+- name: "set CA_SUBJECT var"
+  set_fact:
+    self_signed_ca_subject: '/C={{ self_signed_ca_country }}/ST={{ self_signed_ca_state }}/L={{ self_signed_ca_locality }}/O={{ self_signed_ca_organization }}/OU={{ self_signed_ca_organizationalunit }}/CN={{ self_signed_ca_commonname }}/emailAddress={{ self_signed_ca_email }}'
+
+- name: generate CA private key
+  shell: "{{ item }}"
+  with_items:
+  - "openssl genrsa -out {{ self_signed_ca_key }} 2048"
+  args:
+    creates: "{{ self_signed_ca_key }}"
+
+- name: generate CA public key
+  shell: "{{ item }}"
+  with_items:
+  - "openssl req -config /usr/lib/ssl/openssl.cnf -new -key {{ self_signed_ca_key }} -x509 -days 1825 -out {{ self_signed_ca_cert }} -passin pass:{{ self_signed_ca_rootself_signed_ca_password }} -subj \"{{ self_signed_ca_subject }}\""
+  args:
+    creates: "{{ self_signed_ca_cert }}"
+
+### CERTS
+- name: Ensure directories exist for domain certs, private keys, csr and ext
+  file:
+    dest: '{{ item[0][item[1]].split("/")[0:-1]|join("/") }}'
+    state: directory
+  with_nested:
+  - "{{ self_signed_cert }}"
+  - [ 'self_signed_domain_key', 'self_signed_domain_cert', 'self_signed_domain_csr', 'self_signed_domain_ext' ]
+
+
+# TODO: pregenerovat cert v pripade zmeneneho ext souboru
+- name: Create ext file
+  template:
+    src: ext
+    dest: "{{ item['self_signed_domain_ext'] }}"
+  with_items:
+  - "{{ self_signed_cert }}"
+
+- name: Create private keys for sites
+  shell: "openssl genrsa -out {{ item['self_signed_domain_key'] }} 2048"
+  with_items:
+  - "{{ self_signed_cert }}"
+  args:
+    creates: "{{ item['self_signed_domain_cert'] }}"
+
+- name: Create csr for sites
+  shell: "openssl req -new -key {{ item['self_signed_domain_key'] }} -out {{ item['self_signed_domain_csr'] }} -subj \"{{ self_signed_ca_subject }}\""
+  with_items:
+  - "{{ self_signed_cert }}"
+  args:
+    creates: "{{ item['self_signed_domain_cert'] }}"
+
+- name: Create certificates for sites
+  shell: "openssl x509 -req -in {{ item['self_signed_domain_csr'] }} -CA {{ self_signed_ca_cert }} -CAkey {{ self_signed_ca_key }} -CAcreateserial -out {{ item['self_signed_domain_cert'] }} -days 3650 -sha256 -extfile {{ item['self_signed_domain_ext'] }}"
+  with_items:
+  - "{{ self_signed_cert }}"
+  args:
+    creates: "{{ item['self_signed_domain_cert'] }}"
+

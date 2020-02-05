@@ -1,0 +1,9 @@
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = {{item.self_signed_domain}}
+DNS.2 = www.{{item.self_signed_domain}}
+

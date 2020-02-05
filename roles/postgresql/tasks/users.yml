@@ -1,0 +1,27 @@
+- name: Create users
+  vars:
+    # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+    ansible_ssh_pipelining: true
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    db: "{{ item.db }}"
+    priv: "{{ item.priv }}"
+  with_items: "{{ postgresql_users }}"
+
+- name: Grant access and permissions to users
+  vars:
+    # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+    ansible_ssh_pipelining: true
+  become: true
+  become_user: postgres
+  postgresql_privs:
+    db: "{{ item.db }}"
+    state: "{{ item.state }}"
+    privs: "{{ item.privs }}"
+    type: "{{ item.type }}"
+    roles: "{{ item.roles }}"
+    objs: "{{ item.objs | default(omit) }}"
+  with_items: "{{ postgresql_privs }}"

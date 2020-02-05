@@ -33,6 +33,75 @@
         ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
         ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
 
+    postgresql_databases:
+      - name: quanti_database
+    
+    postgresql_users: 
+      - name: quanti_ro
+        password: asdf
+        priv: CONNECT
+        db: quanti_database
+        
+      - name: quanti_rw
+        password: asdf
+        priv: CONNECT
+        db: quanti_database
+    
+    postgresql_privs:
+      - roles: quanti_rw
+        state: present
+        db: quanti_database
+        privs: ALL
+        type: database
+
+      - roles: quanti_rw
+        state: present
+        db: quanti_database
+        privs: ALL
+        type: table
+        objs: ALL_IN_SCHEMA
+
+      - roles: quanti_rw
+        state: present
+        db: quanti_database
+        privs: ALL
+        type: schema
+        objs: public
+
+
+
+
+      - roles: PUBLIC
+        state: absent
+        db: quanti_database
+        privs: ALL
+        type: schema
+        objs: public
+
+      - roles: quanti_ro
+        state: present
+        db: quanti_database
+        privs: USAGE
+        type: schema
+        objs: public
+
+      - roles: quanti_ro
+        state: absent
+        db: quanti_database
+        privs: INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER
+        type: table
+        objs: ALL_IN_SCHEMA
+
+      - roles: quanti_ro
+        state: present
+        db: quanti_database
+        privs: SELECT
+        type: table
+        objs: ALL_IN_SCHEMA
+        
+        
+
+
   roles:
   - self-signed-cert
   - apache

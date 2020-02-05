@@ -1,2 +1,27 @@
 ---
 # defaults file for postgresql
+
+postgresql_version: 11
+
+# example:
+# postgresql_databases:
+# - example_db:   
+postgresql_databases: []
+
+
+# example:
+# postgresql_users:
+#   - name: example_user
+#     db: example_db
+#     password: strongpassword
+postgresql_users: []
+
+# example:
+# postgresql_privs:
+#   - roles: quanti_ro
+#     state: absent
+#     db: quanti_database
+#     privs: INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER
+#     type: table
+#     objs: ALL_IN_SCHEMA
+postgresql_privs: []

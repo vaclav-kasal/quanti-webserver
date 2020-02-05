@@ -1,7 +1,39 @@
 - hosts: webserver
   become_user: root
   become: true
+  vars:
+    self_signed_ca_key: /etc/ssl/ansible-self-signed/private/ca.key
+    self_signed_ca_cert: /etc/ssl/ansible-self-signed/certs/ca.pem
+    self_signed_ca_rootself_signed_ca_password: 34lkj42lkj5hi
+    self_signed_ca_country: CZ
+    self_signed_ca_state: Czech repubic
+    self_signed_ca_locality: Prague
+    self_signed_ca_organization: Quanti s.r.o.
+    self_signed_ca_organizationalunit: IT
+    self_signed_ca_commonname: Quanti s.r.o
+    self_signed_ca_email: vasekkasal@gmail.com
+
+
+    self_signed_cert:
+    - self_signed_domain: prijimacitest.quanti.cz
+      self_signed_domain_key: /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
+      self_signed_domain_cert: /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
+      self_signed_domain_csr: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.csr
+      self_signed_domain_ext: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.ext
+    
+
+    apache_vhosts:
+      - servername: prijimacitest.quanti.cz
+        documentroot: /var/www/prijimacitestquanticz/
+        https_redirect: true
+
+    apache_ssl_vhosts:
+      - servername:                 prijimacitest.quanti.cz
+        documentroot:               /var/www/prijimacitestquanticz/
+        ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
+        ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
+
   roles:
+  - self-signed-cert
   - apache
   - postgresql
-

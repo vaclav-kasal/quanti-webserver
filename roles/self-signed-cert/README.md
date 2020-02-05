@@ -3,7 +3,7 @@ Self signed certificate
 
 Role for debian 10 and ubuntu 18.04.
 
-For secure connect to the site import generated file self_signed_ca_cert into your browser. You can do it in settings -> search for keyword "cert" and look for import Certificate Authority(CA).
+For secure connect to the site import generated file self_signed_ca_cert into your browser. You can do it in settings -> search for keyword "cert" and look for import Certificate Authority(CA). After import you need to restart browser.
 
 Requirements
 ------------

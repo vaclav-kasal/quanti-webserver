@@ -1,3 +1,6 @@
+#TODO:
+# add readme to postgresql role
+
 - hosts: webserver
   become_user: root
   become: true
@@ -106,4 +109,5 @@
   roles:
   - self-signed-cert
   - apache
+  - apache.php
   - postgresql

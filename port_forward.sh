@@ -1,9 +1,8 @@
 #!/bin/bash
 
+# script forwards standard http/https ports on host to vagrant http/https
 
 echo "1" | sudo tee /proc/sys/net/ipv4/ip_forward
-
-#sudo iptables -t nat -A OUTPUT -p tcp --dport 80  -j REDIRECT --to-port 18080
 
 DPORT=80
 TO=18080

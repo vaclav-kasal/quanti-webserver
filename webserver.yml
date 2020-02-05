@@ -8,11 +8,20 @@
       self_signed_domain_cert: /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
       self_signed_domain_csr: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.csr
       self_signed_domain_ext: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.ext
+    - self_signed_domain: database.quanti.cz
+      self_signed_domain_key: /etc/ssl/ansible-self-signed/private/databasequanticz.key
+      self_signed_domain_cert: /etc/ssl/ansible-self-signed/certs/databasequanticz.crt
+      self_signed_domain_csr: /etc/ssl/ansible-self-signed/tmp/databasequanticz.csr
+      self_signed_domain_ext: /etc/ssl/ansible-self-signed/tmp/databasequanticz.ext
+
     
 
     apache_vhosts:
       - servername: prijimacitest.quanti.cz
         documentroot: /var/www/prijimacitestquanticz/
+        https_redirect: true
+      - servername: database.quanti.cz
+        documentroot: /var/www/databasequanticz/
         https_redirect: true
 
     apache_ssl_vhosts:
@@ -20,6 +29,10 @@
         documentroot:               /var/www/prijimacitestquanticz/
         ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
         ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
+      - servername:                 database.quanti.cz
+        documentroot:               /var/www/databasequanticz/
+        ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/databasequanticz.crt
+        ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/databasequanticz.key
 
     postgresql_databases:
       - name: quanti_database

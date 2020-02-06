@@ -16,7 +16,7 @@
     ansible_ssh_pipelining: true
   become: true
   become_user: postgres
-  shell: psql -v ON_ERROR_STOP=1 -f /tmp/initialize.sql
+  shell: psql -v ON_ERROR_STOP=1 -f /tmp/initialize.sql quanti_database
   register: result
   when: not result.stat.exists
 

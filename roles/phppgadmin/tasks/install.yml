@@ -1,0 +1,28 @@
+- name: Ensure install dir exists
+  file:
+    state: directory
+    path: "{{ phppgadmin_install_directory }}/"
+    recurse: yes
+
+- name: Install dependencies
+  apt:
+    cache_valid_time: 3600
+    update_cache: yes
+    name: unzip,bsdtar
+    state: present
+
+- name: Download phppgadmin
+  get_url:
+    url: https://codeload.github.com/phppgadmin/phppgadmin/zip/master
+    dest: "{{ phppgadmin_install_directory }}"
+
+- name: Extract phppgadmin zip file
+  shell:
+    chdir: "{{ phppgadmin_install_directory }}" 
+    cmd: "bsdtar -xf phppgadmin-master.zip -s'|[^/]*/||'"
+    creates: "{{ phppgadmin_install_directory }}/conf/config.inc.php"
+
+- name: Copy config file
+  copy:
+    src: config.inc.php
+    dest: "{{ phppgadmin_install_directory }}/conf/config.inc.php"

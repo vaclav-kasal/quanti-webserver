@@ -1,0 +1,5 @@
+---
+# defaults file for phppgadmin
+
+phppgadmin_install_directory: /var/www/html/
+install_packages: []

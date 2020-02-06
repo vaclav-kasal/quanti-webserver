@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = "webserver.yml"
+    ansible.playbook = "vagrant-webserver.yml"
   end
 
   # The most common configuration options are documented and commented below.

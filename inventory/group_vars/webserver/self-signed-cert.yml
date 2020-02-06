@@ -1,0 +1,12 @@
+self_signed_cert:
+- self_signed_domain: prijimacitest.quanti.cz
+  self_signed_domain_key: /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
+  self_signed_domain_cert: /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
+  self_signed_domain_csr: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.csr
+  self_signed_domain_ext: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.ext
+- self_signed_domain: database.quanti.cz
+  self_signed_domain_key: /etc/ssl/ansible-self-signed/private/databasequanticz.key
+  self_signed_domain_cert: /etc/ssl/ansible-self-signed/certs/databasequanticz.crt
+  self_signed_domain_csr: /etc/ssl/ansible-self-signed/tmp/databasequanticz.csr
+  self_signed_domain_ext: /etc/ssl/ansible-self-signed/tmp/databasequanticz.ext
+

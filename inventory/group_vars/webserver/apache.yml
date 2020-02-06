@@ -1,0 +1,22 @@
+apache_php_install_packages:
+  - php-mbstring
+  - php-pgsql
+
+apache_vhosts:
+  - servername: prijimacitest.quanti.cz
+    documentroot: /var/www/prijimacitestquanticz/
+    https_redirect: true
+  - servername: database.quanti.cz
+    documentroot: /var/www/databasequanticz/
+    https_redirect: true
+
+apache_ssl_vhosts:
+  - servername:                 prijimacitest.quanti.cz
+    documentroot:               /var/www/prijimacitestquanticz/
+    ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
+    ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
+  - servername:                 database.quanti.cz
+    documentroot:               /var/www/databasequanticz/
+    ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/databasequanticz.crt
+    ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/databasequanticz.key
+

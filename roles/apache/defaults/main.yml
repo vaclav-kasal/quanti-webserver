@@ -6,8 +6,10 @@ apache_listen_ip: "*"
 apache_listen_port: 80
 apache_listen_port_ssl: 443
 
+directory_index: "index.php index.html"
+
 # required properties: documentroot, servername
-# optional properties: serveralias, allow_override, options, extra_parameters
+# optional properties: serveralias, allow_override, options, extra_parameters, directory_index
 apache_vhosts: []
 
 # required properties: documentroot, servername

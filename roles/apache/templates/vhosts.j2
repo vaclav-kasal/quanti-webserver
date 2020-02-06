@@ -13,6 +13,8 @@
   DocumentRoot "{{ vhost.documentroot }}"
 {% endif %}
 
+DirectoryIndex {{ vhost.directory_index | default(directory_index) }}
+
 {% if vhost.documentroot is defined %}
   <Directory "{{ vhost.documentroot }}">
     AllowOverride {{ vhost.allow_override | default(apache_allow_override) }}
@@ -45,6 +47,8 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 {% if vhost.documentroot is defined %}
   DocumentRoot "{{ vhost.documentroot }}"
 {% endif %}
+
+DirectoryIndex {{ vhost.directory_index | default(directory_index) }}
 
 {% if vhost.documentroot is defined %}
   <Directory "{{ vhost.documentroot }}">

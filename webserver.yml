@@ -5,6 +5,11 @@
   become_user: root
   become: true
   vars:
+    phppgadmin_install_directory: /var/www/databasequanticz/
+    apache_php_install_packages:
+      - php-mbstring
+      - php-pgsql
+
     self_signed_cert:
     - self_signed_domain: prijimacitest.quanti.cz
       self_signed_domain_key: /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
@@ -107,7 +112,8 @@
 
 
   roles:
-  - self-signed-cert
-  - apache
+ # - self-signed-cert
+ # - apache
   - apache.php
-  - postgresql
+  - phppgadmin
+ # - postgresql

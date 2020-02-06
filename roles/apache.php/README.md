@@ -2,7 +2,7 @@ Role Name
 =========
 
 Role for Debian 10.
-  - Simple role - installs libapache2-mod-php
+  - Installs libapache2-mod-php and specified packages(modules)
 
 Requirements
 ------------
@@ -14,6 +14,11 @@ Role Variables
 php_version
 ```
 default: 7.3
+
+```
+install_packages
+```
+default: empty list
 
 Dependencies
 ------------

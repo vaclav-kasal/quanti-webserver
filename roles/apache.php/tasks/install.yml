@@ -3,3 +3,18 @@
     cache_valid_time: 3600
     update_cache: yes
     name: "libapache2-mod-php{{ php_version }}"
+
+- name: Install packages
+  apt:
+    cache_valid_time: 3600
+    update_cache: yes
+    name: "{{ apache_php_install_packages }}"
+  register: packages
+
+- name: Restart apache to load new modules
+  service:
+    name: apache2
+    state: restarted
+  when: packages.changed
+
+

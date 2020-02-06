@@ -1,0 +1,116 @@
+- hosts: webserver
+  become_user: root
+  become: true
+  vars:
+    phppgadmin_install_directory: /var/www/databasequanticz/
+    apache_php_install_packages:
+      - php-mbstring
+      - php-pgsql
+
+    self_signed_cert:
+    - self_signed_domain: prijimacitest.quanti.cz
+      self_signed_domain_key: /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
+      self_signed_domain_cert: /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
+      self_signed_domain_csr: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.csr
+      self_signed_domain_ext: /etc/ssl/ansible-self-signed/tmp/prijimacitestquanticz.ext
+    - self_signed_domain: database.quanti.cz
+      self_signed_domain_key: /etc/ssl/ansible-self-signed/private/databasequanticz.key
+      self_signed_domain_cert: /etc/ssl/ansible-self-signed/certs/databasequanticz.crt
+      self_signed_domain_csr: /etc/ssl/ansible-self-signed/tmp/databasequanticz.csr
+      self_signed_domain_ext: /etc/ssl/ansible-self-signed/tmp/databasequanticz.ext
+
+    
+
+    apache_vhosts:
+      - servername: prijimacitest.quanti.cz
+        documentroot: /var/www/prijimacitestquanticz/
+        https_redirect: true
+      - servername: database.quanti.cz
+        documentroot: /var/www/databasequanticz/
+        https_redirect: true
+
+    apache_ssl_vhosts:
+      - servername:                 prijimacitest.quanti.cz
+        documentroot:               /var/www/prijimacitestquanticz/
+        ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/prijimacitestquanticz.crt
+        ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/prijimacitestquanticz.key
+      - servername:                 database.quanti.cz
+        documentroot:               /var/www/databasequanticz/
+        ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/databasequanticz.crt
+        ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/databasequanticz.key
+
+    postgresql_databases:
+      - name: quanti_database
+    
+    postgresql_users: 
+      - name: quanti_ro
+        password: asdf
+        priv: CONNECT
+        db: quanti_database
+        
+      - name: quanti_rw
+        password: asdf
+        priv: CONNECT
+        db: quanti_database
+    
+    postgresql_privs:
+      - roles: quanti_rw
+        state: present
+        db: quanti_database
+        privs: ALL
+        type: database
+
+      - roles: quanti_rw
+        state: present
+        db: quanti_database
+        privs: ALL
+        type: table
+        objs: ALL_IN_SCHEMA
+
+      - roles: quanti_rw
+        state: present
+        db: quanti_database
+        privs: ALL
+        type: schema
+        objs: public
+
+
+
+
+      - roles: PUBLIC
+        state: absent
+        db: quanti_database
+        privs: ALL
+        type: schema
+        objs: public
+
+      - roles: quanti_ro
+        state: present
+        db: quanti_database
+        privs: USAGE
+        type: schema
+        objs: public
+
+      - roles: quanti_ro
+        state: absent
+        db: quanti_database
+        privs: INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER
+        type: table
+        objs: ALL_IN_SCHEMA
+
+      - roles: quanti_ro
+        state: present
+        db: quanti_database
+        privs: SELECT
+        type: table
+        objs: ALL_IN_SCHEMA
+        
+        
+
+
+  roles:
+  - self-signed-cert
+  - apache
+  - apache.php
+  - phppgadmin
+  - postgresql

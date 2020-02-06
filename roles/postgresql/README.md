@@ -1,38 +1,49 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Installs postgresql. Role for debian 10.
+
+SQL file placed in files/initialize.sql is imported only once. If you wish to deploy file again, you need to remove file /etc/postgresql/11/main/initialized.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
-
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Available variables are listed in defaults/main.yml
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+    - hosts: webserver
+      vars:
+        postgresql_databases:
+          - name: example_database  
+        postgresql_users: 
+          - name: example_user_ro
+            password: asdf
+          - name: example_user_rw
+            password: asdf
+        postgresql_privs:
+          - roles: exapmle_user_rw
+            state: present
+            db: example_database
+            privs: ALL
+            type: database
 
-    - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - postgresql
 
 License
 -------
 
-BSD
+WTFPL
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+vasek.kasal@gmail.com

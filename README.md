@@ -1,6 +1,6 @@
 How to run playbook
 ===================
-  - just run:
+  - run:
   ```
   vagrant up --provision
   ./port_forward.sh

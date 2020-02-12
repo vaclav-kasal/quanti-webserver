@@ -26,16 +26,16 @@ Including an example of how to use your role (for instance, with variables passe
       vars:
         apache_vhosts:
           - servername: example.com
-            serveralias: www.example.com
-            documentroot: /var/www/examplecom/public_html
-            extra_parameters: |
-              SSLProtocol             -TLSv1.1 -TLSv1.2 -TLSv1.3
-              SSLHonorCipherOrder     off
-              SSLSessionTickets       off
+            documentroot: /var/www/examplecom/
+            https_redirect: true
 
-              SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP
-              SSLCertificateFile      /etc/ssl/ansible-self-signed/certs/example.com.crt
-              SSLCertificateKeyFile   /etc/ssl/ansible-self-signed/private/example.com.key
+        apache_ssl_vhosts:
+          - servername:                 example.com
+            documentroot:               /var/www/examplecom/
+            ssl_certificate_file:       /etc/ssl/ansible-self-signed/certs/examplecom.crt
+            ssl_certificate_key_file:   /etc/ssl/ansible-self-signed/private/examplecom.key
+
+
 
       roles:
       - apache
